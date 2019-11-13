@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<body>
+    <script src="https://d3js.org/d3.v5.js"></script>
+    <script src="https://unpkg.com/viz.js@1.8.1/viz.js" type="application/javascript"></script>
+    <script src="https://unpkg.com/d3-graphviz@2.6.1/build/d3-graphviz.js"></script>
+    <input type="text">
+    <button>click</button>
+    <div id="graph0"></div>
+    <script>
+        var inp = document.querySelector("input");
+        var btn = document.querySelector("button");
+        var div = document.createElement("div");
+        div.id = "graph1";
+        document.body.appendChild(div);
+        var dotIndex;
+        var graphviz = [];
+        btn.onclick = function() {
+            var num = inp.value;
+            console.log(inp.value);
+            btn.disabled = true;
+            for (let index = 0; index < num; index++) {
+                dotIndex = 0;
+                graphviz.push(
+                    d3.select("#graph" + index).graphviz()
+                    .transition(function() {
+                        return d3.transition("main")
+                            .ease(d3.easeLinear)
+                            .delay(500)
+                            .duration(500);
+                    })
+                    .logEvents(true)
+                    .on("initEnd", render));
+
+            }
+
+        }
+
+        function render() {
+            var dotLines = dots[dotIndex];
+            var dot = dotLines.join('');
+            for (let index = 0; index < graphviz.length; index++) {
+                const element = graphviz[index];
+                element
+                    .renderDot(dot)
+                    .on("end", function() {
+                        dotIndex += 1;
+                        if (dotIndex < dots.length) {
+                            render();
+                        }
+                    });
+            }
+        }
+
+        var dots = [
+            [
+                'digraph  {',
+                '    node [style="filled"]',
+                '    "graphviz"      [fillcolor="#d62728", shape="ellipse"]',
+                '    "D3"            [fillcolor="#1f77b4", shape="hexagon"]',
+                '}'
+            ],
+            [
+                'digraph  {',
+                '    node [style="filled"]',
+                '    "graphviz"      [fillcolor="#d62728", shape="ellipse"]',
+                '    "D3"            [fillcolor="#1f77b4", shape="hexagon"]',
+                '    "d3-graphviz"   [fillcolor="#2ca02c", shape="egg"]',
+                '    "D3" -> "d3-graphviz"   [color = cyan, label = "yupi"]',
+                '    "graphviz" -> "d3-graphviz"',
+                '}'
+            ],
+        ];
+    </script>

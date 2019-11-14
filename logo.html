@@ -5,71 +5,156 @@
     <script src="https://d3js.org/d3.v5.js"></script>
     <script src="https://unpkg.com/viz.js@1.8.1/viz.js" type="application/javascript"></script>
     <script src="https://unpkg.com/d3-graphviz@2.6.1/build/d3-graphviz.js"></script>
-    <input type="text">
-    <button>click</button>
-    <div id="graph0"></div>
+    <input type="text" data-placeholder = "digite 1 ou 2">
+    <button style="color: green">start</button>
+    <div id="graph"></div>
     <script>
-        var inp = document.querySelector("input");
+        //input-placeholder
+        var inputs = document.getElementsByTagName("input");
+        for (var i = 0; i < inputs.length; i++) {
+            inputs[i].value = inputs[i].getAttribute('data-placeholder');
+            inputs[i].addEventListener('focus', function() {
+                if (this.value == this.getAttribute('data-placeholder')) {
+                    this.value = '';
+                }
+            });
+            inputs[i].addEventListener('blur', function() {
+                if (this.value == '') {
+                    this.value = this.getAttribute('data-placeholder');
+                }
+            });
+        }
+        
+        //elements
         var btn = document.querySelector("button");
-        var div = document.createElement("div");
-        div.id = "graph1";
-        document.body.appendChild(div);
+        var inp = document.querySelector("input");
+        
+        //headers
         var dotIndex;
-        var graphviz = [];
-        btn.onclick = function() {
-            var num = inp.value;
-            console.log(inp.value);
-            btn.disabled = true;
-            for (let index = 0; index < num; index++) {
-                dotIndex = 0;
-                graphviz.push(
-                    d3.select("#graph" + index).graphviz()
-                    .transition(function() {
-                        return d3.transition("main")
-                            .ease(d3.easeLinear)
-                            .delay(500)
-                            .duration(500);
-                    })
-                    .logEvents(true)
-                    .on("initEnd", render));
+        var graphviz;
+        var dots;
+        var num;
 
-            }
+        btn.onclick = function() {
+            num = inp.value;
+
+            btn.disabled = true;
+
+            dots();
+
+            dotIndex = 0;
+            graphviz = d3.select("#graph").graphviz()
+                .transition(function() {
+                    return d3.transition("main")
+                        .ease(d3.easeLinear)
+                        .delay(500)
+                        .duration(500);
+                })
+                .on("initEnd", render);
+
 
         }
 
         function render() {
             var dotLines = dots[dotIndex];
             var dot = dotLines.join('');
-            for (let index = 0; index < graphviz.length; index++) {
-                const element = graphviz[index];
-                element
-                    .renderDot(dot)
-                    .on("end", function() {
-                        dotIndex += 1;
-                        if (dotIndex < dots.length) {
-                            render();
-                        }
-                    });
+            const element = graphviz;
+            element
+                .renderDot(dot)
+                .on("end", function() {
+                    console.log(dots[dotIndex]);
+                    dotIndex += 1;
+                    if (dotIndex < dots.length) {
+                        render();
+                    }
+                });
+        }
+
+        function test() {
+            console.log(num)
+            if (num === "1" || num === "2") {
+                return '    "q1"      [fillcolor="#d62728"]'
+            }
+            else{
+                return '"q1"'
+            }
+        }
+        function test2() {
+            console.log(num)
+            if (num === "1") {
+                return '    "q2"      [fillcolor="#d62728"]'
+            }
+            else{
+                return '"q2"'
+            }
+        }
+        function test3() {
+            console.log(num)
+            if (num === "1" || num === "2") {
+                return '    "q3"      [fillcolor="#d62728"]'
+            }
+            else{
+                return '"q3"'
+            }
+        }
+        function test4() {
+            console.log(num)
+            if (num === "2") {
+                return '    "q4"      [fillcolor="#d62728"]'
+            }
+            else{
+                return '"q4"'
             }
         }
 
-        var dots = [
+        function dots() {
+            dots = [
             [
                 'digraph  {',
-                '    node [style="filled"]',
-                '    "graphviz"      [fillcolor="#d62728", shape="ellipse"]',
-                '    "D3"            [fillcolor="#1f77b4", shape="hexagon"]',
+                'node [style="filled"]',
+                '"q1"',
+                '"q2"',
+                '"q3"',
+                '"q4"',
+                '"q1" -> "q2" -> "q3"',
+                '"q1" -> q4 -> q3',
                 '}'
             ],
             [
                 'digraph  {',
-                '    node [style="filled"]',
-                '    "graphviz"      [fillcolor="#d62728", shape="ellipse"]',
-                '    "D3"            [fillcolor="#1f77b4", shape="hexagon"]',
-                '    "d3-graphviz"   [fillcolor="#2ca02c", shape="egg"]',
-                '    "D3" -> "d3-graphviz"   [color = cyan, label = "yupi"]',
-                '    "graphviz" -> "d3-graphviz"',
+                'node [style="filled"]',
+                test(),
+                '"q2"',
+                '"q3"',
+                '"q4"',
+                '"q1" -> "q2" -> "q3"',
+                '"q1" -> q4 -> q3',
                 '}'
             ],
-        ];
+            [
+                'digraph  {',
+                'node [style="filled"]',
+                '"q1"   ',
+                test2(),
+                '"q3"',
+                test4(),
+                '"q1" -> "q2" -> "q3"',
+                'q1 -> q4 -> q3',
+                '}'
+            ],
+            [
+                'digraph  {',
+                'node [style="filled"]',
+                '"q1"',
+                '"q2"',
+                test3(),
+                '"q4"',
+                '"q1" -> "q2" -> "q3"',
+                '"q1" -> q4 -> q3',
+                '}'
+            ],
+            ];
+        }
+
+        
     </script>

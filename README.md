@@ -12,8 +12,8 @@
 - [x] automato simples funcionando em paralelo
 - [x] botões start, stop, continue
 - [x] arrowright avanca quando o automato esta parado
-- [] arrowleft volta o automato
-- [] arrumar alguns bugs dos botões
-- [] colocar o automato certo
-- [] arrumar estilização
-- [] colocar botões para mostrar outros automatos (robos, esteira buffer, etc...)
+- [ ] arrowleft volta o automato
+- [ ] arrumar alguns bugs dos botões
+- [ ] colocar o automato certo
+- [ ] arrumar estilização
+- [ ] colocar botões para mostrar outros automatos (robos, esteira buffer, etc...)

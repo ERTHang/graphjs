@@ -9,10 +9,15 @@
     <script src="https://d3js.org/d3.v5.js"></script>
     <script src="https://unpkg.com/viz.js@1.8.1/viz.js" type="application/javascript"></script>
     <script src="https://unpkg.com/d3-graphviz@2.6.1/build/d3-graphviz.js"></script>
-    <input type="text" data-placeholder="digite 1 ou 2">
-    <button class="button button-1" id="btn1">start/restart</button>
-    <button class="button button-2" id="btn2">stop</button>
-    <button class="button button-3" id="btn3">continue</button>
+    <input type="text" data-placeholder="Insira a demanda, e.g:121212">
+    <div id="buttons">
+        <button class="button button-1" id="btn1">start/restart</button>
+        <button class="button button-2" id="btn2">stop</button>
+        <button class="button button-3" id="btn3">continue</button>
+    </div>
+    <div id=divs>
+        <div id="graphs"></div>
+        <div id="rainbows"></div>
+        <div id="legenda"></div>
+    </div>
     <script src="graphviz.js"></script>
-    <div id="rainbows"></div>
-    <div id="graphs"></div>

@@ -20,14 +20,13 @@ var inp = document.querySelector("input");
 var btn2 = document.querySelector("#btn2");
 var btn3 = document.querySelector("#btn3");
 var legenda = document.querySelector("div#legenda")
-var divs = document.querySelector("#divs");
 
 //headers
 var dotIndex;
 var graphviz;
-//var rainbowgraph
+var rainbowgraph
 var dots = [];
-//var rainbowdots = []
+var rainbowdots = []
 var num;
 var i = 0,
     j = 0;
@@ -89,13 +88,7 @@ btn.onclick = function() {
     num = inp.value;
     pt = []
     dots = []
-    //rainbowdots = []
-
-    legenda.remove()
-    var aux = document.createElement("div")
-    aux.id = "legenda"
-    divs.appendChild(aux)
-    legenda = document.querySelector("#legenda")
+    rainbowdots = []
 
 
     for (let index = 0; index < num.length; index++) {
@@ -107,10 +100,10 @@ btn.onclick = function() {
                 this.value = val
             }
         })
-        txt = document.createElement("h1");
+        /*txt = document.createElement("h1");
         txt.textContent = "Peça nº " + (index + 1) + " do tipo " + element;
         txt.setAttribute("style", "color : " + pt[index].color);
-        legenda.appendChild(txt);
+        legenda.appendChild(txt);*/
     }
 
 
@@ -128,7 +121,7 @@ btn.onclick = function() {
     gradiv.appendChild(graph);
 
 
-    //showElements();
+    showElements();
 
     dotIndex = 0;
     graphviz = d3.select("#graph" + i).graphviz()

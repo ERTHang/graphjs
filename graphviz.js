@@ -91,6 +91,7 @@ btn.onclick = function() {
     dots = []
     //rainbowdots = []
 
+
     legenda.remove()
     var aux = document.createElement("div")
     aux.id = "legenda"
@@ -100,6 +101,12 @@ btn.onclick = function() {
 
     for (let index = 0; index < num.length; index++) {
         const element = num[index];
+
+        if (element != "1" && element != "2") {
+            alert("Valor inválido: \"" + element + "\", insira apenas \"1\" ou \"2\"");
+            return;
+        }
+
         pt.push({
             'value': element,
             'color': getRandomColor(),
@@ -145,25 +152,7 @@ btn.onclick = function() {
 function checktam() {
 
 
-    if (num.length === 1) {
-        push1(0);
-        push2only(0);
-        push3only1(0);
-    } else if (num.length === 2) {
-        push1(0);
-        push2(0);
-        push3only2(0);
-        push3only1(1);
-    } else {
-        push1(0);
-        push2(0);
-        for (let index = 0; index < num.length - 2; index++) {
-            push3(index);
-        }
-        push3only2(num.length - 2);
-        push3only1(num.length - 1);
-    }
-    endpush();
+    push()
 
 }
 
@@ -186,215 +175,50 @@ function render() {
             }
         });
 }
-
-function test(i) {
-    return '    "q1"      [fillcolor="' + pt[i].color + '"]'
-}
-
-function test2(i) {
-    if (pt[i].value == "1") {
-        return '    "q2"      [fillcolor="' + pt[i].color + '"]'
-    } else {
-        return '"q2"'
-    }
-}
-
-function test3(i) {
-    return '    "q3"      [fillcolor="' + pt[i].color + '"]'
-}
-
-function test4(i) {
-    if (pt[i].value == "2") {
-        return '    "q4"      [fillcolor="' + pt[i].color + '"]'
-    } else {
-        return '"q4"'
-    }
-}
-
-
-function endpush() {
+function push() {
     dots.push(
         [
-            'digraph  {',
-            'node [style="filled"]',
-            '"q1"',
-            '"q2"',
-            '"q3"',
-            '"q4"',
-            '"q1" -> "q2" -> "q3"',
-            '"q1" -> q4 -> q3',
-            '}'
-        ]);
-}
-
-function push1(i) {
-    dots.push(
-        [
-            'digraph  {',
-            'node [style="filled"]',
-            test(i),
-            '"q2"',
-            '"q3"',
-            '"q4"',
-            '"q1" -> "q2" -> "q3"',
-            '"q1" -> q4 -> q3',
-            '}'
-        ]
-    )
-}
-
-function push2(i) {
-    dots.push(
-        [
-
-            'digraph  {',
-            'node [style="filled"]',
-            test(i + 1),
-            test2(i),
-            '"q3"',
-            test4(i),
-            '"q1" -> "q2" -> "q3"',
-            '"q1" -> q4 -> q3',
-            '}'
-
-        ]
-    )
-}
-
-function push2only(i) {
-    dots.push(
-        [
-
-            'digraph  {',
-            'node [style="filled"]',
-            '"q1"',
-            test2(i),
-            '"q3"',
-            test4(i),
-            '"q1" -> "q2" -> "q3"',
-            '"q1" -> q4 -> q3',
-            '}'
-
-        ]
-    )
-}
-
-function push3(i) {
-    dots.push(
-        [
-
-            'digraph  {',
-            'node [style="filled"]',
-            test(i + 2),
-            test2(i + 1),
-            test3(i),
-            test4(i + 1),
-            '"q1" -> "q2" -> "q3"',
-            '"q1" -> q4 -> q3',
-            '}'
-
-        ]
-    )
-}
-
-function push3only1(i) {
-    dots.push(
-        [
-
-            'digraph  {',
-            'node [style="filled"]',
-            '"q1"',
-            '"q2"',
-            test3(i),
-            '"q4"',
-            '"q1" -> "q2" -> "q3"',
-            '"q1" -> q4 -> q3',
-            '}'
-
-        ]
-    )
-}
-
-function push3only2(i) {
-    dots.push(
-        [
-
-            'digraph  {',
-            'node [style="filled"]',
-            '"q1"',
-            test2(i + 1),
-            test3(i),
-            test4(i + 1),
-            '"q1" -> "q2" -> "q3"',
-            '"q1" -> q4 -> q3',
-            '}'
-
-        ]
-    )
-}
-
-
-function showElements() {
-    if (j != 0) {
-        var del = document.querySelector("#rainbow" + j);
-        del.remove();
-    }
-
-    j++;
-    var rainbow = document.createElement("div");
-    rainbow.id = "rainbow" + i;
-    var raindiv = document.querySelector("#rainbows")
-    raindiv.appendChild(rainbow);
-
-
-
-    dotIndex = 0;
-    rainbowgraph = d3.select("#rainbow" + i).graphviz()
-        .transition(function() {
-            return d3.transition("main")
-                .delay(0)
-                .duration(0);
-        })
-        .engine("fdp")
-        .height(400)
-        .fit(true)
-        .on("initEnd", render2);
-}
-
-function render2() {
-    fillrainbow();
-    var dotLines = rainbowdots[0];
-    var dot = dotLines.join('');
-    const element = rainbowgraph;
-    element.renderDot(dot)
-}
-
-function colorsOfTheRainbow() {
-
-    var text = [
         'digraph  {',
-        'node [style="filled"]',
-        '"tipo1" [shape = "polygon", color = "cyan"]',
-        '"tipo2" [shape = "polygon", color = "yellow"]',
-    ]
-
-    for (let index = 1; index <= pt.length; index++) {
-        const element = pt[index - 1];
-        text.push("\"" + index + "\" [color = \"" + element.color + "\"]");
-        if (element.value == "1") {
-            text.push("\"" + index + "\" -> \"tipo1\"");
-        } else if (element.value == "2") {
-            text.push("\"" + index + "\" -> \"tipo2\"");
-        }
-    }
-
-    text.push("}");
-
-    return text;
-}
-
-function fillrainbow() {
-    rainbowdots.push(
-        colorsOfTheRainbow()
+            'node [style="filled"]',
+            '"Armazem"',
+            '"Esteira"',
+            '"Qualidade"',
+            '"bQualidade"',
+            '"Montagem"',
+            '"bMontagem"',
+            '"Mill_turn"',
+            '"bMillTurn"',
+            '"rQualidade"',
+            '"rMontagem"',
+            '"rMillTurn"',
+            '"END"',
+            '"Armazem" -> "Esteira" [label = "a.1, b.1"]',
+            '"Esteira" -> "Esteira" [label = "el?"]',
+            //qualidade
+            '"Esteira" -> "rQualidade" [label = "a.7, b.7"]',
+            '"rQualidade" -> "bQualidade" [label = "a.3, b.3"]',
+            '"bQualidade" -> "rQualidade" [label = "a.4, b.4"]',
+            '"rQualidade" -> "Qualidade" [label = "a.5, b.5"]',
+            '"Qualidade" -> "rQualidade" [label = "a.6, b.6"]',
+            '"rQualidade" -> "Esteira" [label = "a.2, b.2"]',
+            //montagem
+            '"Esteira" -> "rMontagem" [label = "a.8"]',
+            '"rMontagem" -> "bMontagem" [label = "a.9"]',
+            '"bMontagem" -> "rMontagem" [label = "a.10"]',
+            '"rMontagem" -> "Montagem" [label = "a.11"]',
+            '"Montagem" -> "rMontagem" [label = "a.12"]',
+            '"rMontagem" -> "Esteira" [label = "a.13"]',
+            //millturn
+            '"Esteira" -> "rMillTurn" [label = "b.8"]',
+            '"rMillTurn" -> "bMillTurn" [label = "b.9"]',
+            '"bMillTurn" -> "rMillTurn" [label = "b.10"]',
+            '"rMillTurn" -> "Mill_turn" [label = "b.11"]',
+            '"Mill_turn" -> "rMillTurn" [label = "b.12"]',
+            '"rMillTurn" -> "Esteira" [label = "b.13"]',
+            //fim
+            '"Esteira" -> "Armazem" [label = "a.def, b.def, a.ok, b.ok"]',
+            '"Armazem" -> "END" [label = "fim"]',
+            '}'
+        ]
     )
 }

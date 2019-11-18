@@ -151,25 +151,27 @@ btn.onclick = function() {
 
 
 function checktam() {
-
-    push()
-    push_armazem(0)
-    push_esteira(0)
-    push_rqualidade(0)
-    push_qualidade(0)
-    push_rqualidade(0)
-    push_esteira(0)
-    push_rmaquinas(0)
-    push_maquinas(0)
-    push_rmaquinas(0)
-    push_esteira(0)
-    push_rqualidade(0)
-    push_qualidade(0)
-    push_rqualidade(0)
-    push_esteira(0)
-    push_armazem(0)
-    push_end(0)
-    push()
+    for (let index = 0; index < num.length; index++) {
+        push()
+        push_armazem(index)
+        push_esteira(index)
+        push_rqualidade(index)
+        push_qualidade(index)
+        push_rqualidade(index)
+        push_esteira(index)
+        push_rmaquinas(index)
+        push_maquinas(index)
+        push_rmaquinas(index)
+        push_esteira(index)
+        push_rqualidade(index)
+        push_qualidade(index)
+        push_rqualidade(index)
+        push_esteira(index)
+        push_armazem(index)
+        push_end(index)
+        push()
+        
+    }
 }
 
 

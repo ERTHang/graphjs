@@ -14,6 +14,10 @@
 - [x] arrowright avanca quando o automato esta parado
 - [x] arrowleft volta o automato
 - [x] arrumar alguns bugs dos botões
-- [ ] colocar o automato certo
-- [ ] arrumar estilização
+- [x] colocar o automato certo
+- [ ] atualizar automato
+- [x] arrumar estilização (talvez eu não vá mais mexer nela, então vou considerar marcado)
+- [ ] colocar demanda no automato certo
 - [ ] colocar botões para mostrar outros automatos (robos, esteira buffer, etc...)
+- [ ] campo para algo que está faltando e não quero colocar aqui
+- [ ] <span style = "color:green"><em>TRABALHO ENTREGUE</em></span>

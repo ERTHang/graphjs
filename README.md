@@ -20,4 +20,4 @@
 - [ ] colocar demanda no automato certo
 - [ ] colocar botões para mostrar outros automatos (robos, esteira buffer, etc...)
 - [ ] campo para algo que está faltando e não quero colocar aqui
-- [ ] <span style = "color:green"><em>TRABALHO ENTREGUE</em></span>
+- [ ] <font color='green'><em>TRABALHO ENTREGUE</em></font>

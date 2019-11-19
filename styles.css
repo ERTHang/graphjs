@@ -3,7 +3,7 @@ body {
     flex-direction: column;
 }
 
-#buttons{
+#buttons {
     margin-left: auto;
     margin-right: auto;
     padding: 5px;
@@ -24,16 +24,17 @@ body {
     justify-content: space-around;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 50px;
-    width: 500px;
+    width: 700px;
 }
 
-#graphs{
+#graphs {
     margin-left: auto;
     margin-right: auto;
 }
 
+
 /*inputs*/
+
 input {
     color: grey;
     opacity: 0.7;
@@ -53,7 +54,8 @@ input:focus {
 
 
 /*legendas*/
-#legenda > h1 {
+
+#legenda>h1 {
     line-height: 1.5;
     font-size: 1em;
     font-family: sans-serif;
@@ -89,7 +91,6 @@ input:focus {
     border: 3px solid #00d7c3;
 }
 
-
 .button-2 {
     border: 3px solid red;
     color: red;
@@ -112,7 +113,7 @@ input:focus {
 
 
 /*arrumar esse outline chato*/
+
 *:focus {
     outline: none;
 }
-

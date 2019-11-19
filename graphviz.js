@@ -125,6 +125,10 @@ document.body.addEventListener("keyup", (e) => {
                     i++
                 })
                 showQualidade = true;
+                var erros = document.createElement("h1")
+                erros.textContent = 'Porcentagem de erro'
+                erros.setAttribute('style', 'font-size: 2em; color: red; margin-left: auto; margin-right:auto')
+                legenda.before(erros)
             }
         }
     }
@@ -171,6 +175,11 @@ btn.onclick = function() {
     num = inp.value;
     reset()
 
+    var erro = divs.querySelector("h1")
+    if (erro != null) {
+        erro.remove()
+    }
+
     legenda.remove()
     var aux = document.createElement("div")
     aux.id = "legenda"
@@ -204,7 +213,7 @@ btn.onclick = function() {
 
     checks()
 
-    if (k > 1200) {
+    if (k >= 1200) {
         alert("Ops, algo deu errado, tente novamente")
         location.reload()
         return;
@@ -260,8 +269,9 @@ function render() {
                     })
                     var erros = document.createElement("h1")
                     erros.textContent = 'Porcentagem de erro'
-                    erros.setAttribute('style', 'font-size: 2em; color: red')
-                    legenda.firstChild.before(erros)
+                    erros.setAttribute('style', 'font-size: 2em; color: red; margin-left: auto; margin-right:auto')
+                    legenda.before(erros)
+                    showQualidade = true
                 }
 
             }
@@ -398,7 +408,9 @@ function check_rqualidade() {
                     }
                 }
             } else if (peca.qualidade === -1) {
-                troca('rqualidade', 'qualidade')
+                if (pt[peca.rqualidade].destino === 'qualidade') {
+                    troca('rqualidade', 'qualidade')
+                }
             } else {
                 check_qualidade()
             }
@@ -434,12 +446,16 @@ function check_qualidade() {
                 pt[peca.qualidade].qualidade = Math.round(Math.random() * n++ * 100) / 100
                 if (pt[peca.qualidade].qualidade >= 5 && pt[peca.qualidade].value == '1') {
                     pt[peca.qualidade].destino = 'descarte'
-                    manutencaotm = true
-                    manutimetm = 0
+                    if (!manutencaotm) {
+                        manutencaotm = true
+                        manutimetm = 0
+                    }
                 } else if (pt[peca.qualidade].qualidade >= 3 && pt[peca.qualidade].value == '2') {
                     pt[peca.qualidade].destino = 'descarte'
-                    manutencaomontagem = true
-                    manutimemontagem = 0
+                    if (!manutencaomontagem) {
+                        manutencaomontagem = true
+                        manutimemontagem = 0
+                    }
                 } else {
                     pt[peca.qualidade].destino = 'end'
                 }
@@ -451,7 +467,13 @@ function check_qualidade() {
                 }
             }
             if (modificar.rqualidade) {
-                troca('qualidade', 'rqualidade')
+                if (peca.rqualidade === -1) {
+                    troca('qualidade', 'rqualidade')
+                } else {
+                    if (pt[peca.rqualidade].destino === 'qualidade') {
+                        troca('qualidade', 'rqualidade')
+                    }
+                }
             }
         }
     }
@@ -460,7 +482,7 @@ function check_qualidade() {
 function check_btm() {
     if (peca.btm != -1) {
         if (modificar.btm) {
-            if (peca.rtm === -1 && !manutencaotm) {
+            if (peca.rtm === -1 && (!manutencaotm || pt[peca.btm].destino != 'turnmill')) {
                 troca('rtm', 'btm')
             }
         }
@@ -507,6 +529,7 @@ function check_tm() {
             }
         }
     } else {
+        console.log(manutimetm)
         if (manutencaotm) {
             manutimetm++;
             if (manutimetm === 10) {
@@ -520,7 +543,7 @@ function check_tm() {
 function check_bmontagem() {
     if (peca.bmontagem != -1) {
         if (modificar.bmontagem) {
-            if (peca.rmontagem === -1 && !manutencaomontagem) {
+            if (peca.rmontagem === -1 && (!manutencaomontagem || pt[peca.bmontagem] != 'montagem')) {
                 troca('rmontagem', 'bmontagem')
             }
         }

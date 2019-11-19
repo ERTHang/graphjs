@@ -15,9 +15,12 @@
 - [x] arrowleft volta o automato
 - [x] arrumar alguns bugs dos botões
 - [x] colocar o automato certo
-- [ ] atualizar automato
+- [x] atualizar automato
+- [x] paralelismo
 - [x] arrumar estilização (talvez eu não vá mais mexer nela, então vou considerar marcado)
-- [ ] colocar demanda no automato certo
+- [x] colocar demanda no automato certo
+- [ ] arrumar automato
 - [ ] colocar botões para mostrar outros automatos (robos, esteira buffer, etc...)
+- [ ] manutencao e verificacao de qualidade
 - [ ] campo para algo que está faltando e não quero colocar aqui
 - [ ] <font color='green'><em>TRABALHO ENTREGUE</em></font>

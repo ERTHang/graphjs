@@ -5,7 +5,7 @@
 
 ### Windows/Linux:
 
-#### Clicar [AQUI](https://codeload.github.com/ERTHang/graphjs/zip/master) para baixar o zip, extrair para algum local e abrir o arquivo html.
+#### Clicar [AQUI](https://codeload.github.com/ERTHang/graphjs/zip/master) para baixar o zip, extraia para algum local e abra o arquivo html.
 
 
 ## TODO

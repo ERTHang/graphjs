@@ -64,7 +64,7 @@ input:focus {
 }
 
 .button {
-    width: 130px;
+    width: 150px;
     border-radius: 50px;
     -webkit-transition: all .15s ease-in-out;
     transition: all .15s ease-in-out;

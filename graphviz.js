@@ -30,6 +30,11 @@ var num;
 var pt = []
 var interative = false;
 var txt;
+var showQualidade = false
+var manutencaotm = false
+var manutencaomontagem = false
+var manutimetm = 0;
+var manutimemontagem = 0;
 
 //peca
 var peca = {
@@ -91,6 +96,12 @@ function reset() {
     pt = []
     dots = []
     interative = false;
+    showQualidade = false;
+    n = 1
+    manutencaotm = false
+    manutencaomontagem = false
+    manutimetm = 0
+    manutimemontagem = 0
 }
 
 
@@ -99,21 +110,34 @@ document.body.addEventListener("keyup", (e) => {
     if (interative) {
         if (e.key === "ArrowRight") {
             dotIndex++;
-            var dotLines = dots[dotIndex];
-            var dot = dotLines.join('');
-            const element = graphviz;
-            element
-                .renderDot(dot)
+            if (dotIndex < dots.length) {
+                var dotLines = dots[dotIndex];
+                var dot = dotLines.join('');
+                const element = graphviz;
+                element
+                    .renderDot(dot)
+            } else if (!showQualidade) {
+                dotIndex--;
+                var relatorio = legenda.querySelectorAll("h1")
+                var i = 0
+                relatorio.forEach((param) => {
+                    param.innerHTML = param.innerHTML + " [" + pt[i].qualidade + "%]"
+                    i++
+                })
+                showQualidade = true;
+            }
         }
     }
     if (interative) {
         if (e.key === "ArrowLeft") {
             dotIndex--;
-            var dotLines = dots[dotIndex];
-            var dot = dotLines.join('');
-            const element = graphviz;
-            element
-                .renderDot(dot)
+            if (dotIndex >= 0) {
+                var dotLines = dots[dotIndex];
+                var dot = dotLines.join('');
+                const element = graphviz;
+                element
+                    .renderDot(dot)
+            }
         }
     }
 
@@ -172,15 +196,19 @@ btn.onclick = function() {
             'color': getRandomColor(),
             'etapa': '',
             'destino': '',
-            'complete': false
+            'complete': false,
+            'qualidade': 0
         })
-        txt = document.createElement("h1");
-        txt.textContent = "Peça nº " + (index + 1) + " do tipo " + element;
-        txt.setAttribute("style", "color : " + pt[index].color);
-        legenda.appendChild(txt);
+
     }
 
     checks()
+
+    if (k > 1200) {
+        alert("Ops, algo deu errado, tente novamente")
+        location.reload()
+        return;
+    }
 
     var gradiv = document.querySelector("#graphs")
     var del = gradiv.querySelector("#graph");
@@ -194,13 +222,15 @@ btn.onclick = function() {
         .transition(function() {
             return d3.transition()
                 .delay(0)
-                .duration(500);
+                .duration(500)
         })
-        .on("initEnd", render);
+        .on("initEnd", render)
+        .height(300)
+        .fit(true)
 
 }
 
-
+var j;
 
 function render() {
     var dotLines = dots[dotIndex];
@@ -209,23 +239,44 @@ function render() {
     element
         .renderDot(dot)
         .on("end", function() {
+            if (j < pt.length) {
+                if (dots[dotIndex][2].includes('color')) {
+                    criar_legenda(j)
+                    j++
+                }
+            }
 
             if (!interative) {
                 dotIndex++;
 
                 if (dotIndex < dots.length) {
                     render();
+                } else if (!showQualidade) {
+                    var relatorio = legenda.querySelectorAll("h1")
+                    var i = 0
+                    relatorio.forEach((param) => {
+                        param.innerHTML = param.innerHTML + " [" + pt[i].qualidade + "%]"
+                        i++
+                    })
+                    var erros = document.createElement("h1")
+                    erros.textContent = 'Porcentagem de erro'
+                    erros.setAttribute('style', 'font-size: 2em; color: red')
+                    legenda.firstChild.before(erros)
                 }
 
             }
         });
 }
 var i;
+var k;
 
 function checks() {
+    j = 0
     i = 0
-    while (i != pt.length) {
-        //while (i < 20) {
+    k = 0
+    while (i != pt.length && k < 1200) {
+        //while (k < 60) {
+        k++
         check_esteira()
         check_rtm()
         check_btm()
@@ -242,26 +293,6 @@ function checks() {
     }
 }
 
-function push() {
-    var txt = padrao()
-    txt = txt.concat([
-        '"Armazem"',
-        '"Esteira"',
-        '"Qualidade"',
-        '"bQualidade"',
-        '"Montagem"',
-        '"bMontagem"',
-        '"Mill_turn"',
-        '"bMillTurn"',
-        '"rQualidade"',
-        '"rMontagem"',
-        '"rMillTurn"',
-        '"END"'
-    ])
-    txt = txt.concat(extra())
-    dots.push(txt)
-}
-
 //CHEKS
 
 function check_end() {
@@ -272,6 +303,13 @@ function check_end() {
             i++;
         }
     }
+}
+
+function criar_legenda(index) {
+    txt = document.createElement("h1");
+    txt.textContent = "Peça nº " + (index + 1) + " do tipo " + pt[index].value;
+    txt.setAttribute("style", "color : " + pt[index].color);
+    legenda.appendChild(txt);
 }
 
 function check_armazem() {
@@ -290,6 +328,10 @@ function check_armazem() {
         if (modificar.armazem) {
             if (pt[peca.armazem].destino === 'end') {
                 troca('armazem', 'end')
+            } else if (pt[peca.armazem].destino === 'descarte') {
+                pt[peca.armazem].etapa = 'fim'
+                peca.armazem = -1
+                i++;
             } else if (peca.esteira === -1) {
                 troca('esteira', 'armazem')
             }
@@ -299,16 +341,12 @@ function check_armazem() {
 
 function check_esteira() {
     if (peca.esteira != -1) {
-        if (pt[peca.esteira].destino === 'end') {
+        if (pt[peca.esteira].destino === 'end' || pt[peca.esteira].destino === 'descarte') {
             if (peca.armazem != -1) {
-                if (pt[peca.armazem].destino === 'end') {
-                    check_end()
-                    check_armazem()
-                }
-                troca('armazem', 'esteira')
-            } else {
-                troca('armazem', 'esteira')
+                check_end()
+                check_armazem()
             }
+            troca('armazem', 'esteira')
             modificar.armazem = false
         } else if (pt[peca.esteira].destino === 'qualidade') {
             if (peca.rqualidade != -1) {
@@ -321,11 +359,25 @@ function check_esteira() {
                 troca('esteira', 'rqualidade')
             }
         } else if (pt[peca.esteira].destino === 'turnmill') {
-            troca('esteira', 'rtm')
-            modificar.rtm = false
+            if (peca.rtm != -1) {
+                if (pt[peca.rtm].destino != 'turnmill') {
+                    troca('esteira', 'rtm')
+                } else {
+                    check_rtm()
+                }
+            } else {
+                troca('esteira', 'rtm')
+            }
         } else if (pt[peca.esteira].destino === 'montagem') {
-            troca('rmontagem', 'esteira')
-            modificar.rmontagem = false
+            if (peca.rmontagem != -1) {
+                if (pt[peca.rmontagem].destino != 'montagem') {
+                    troca('esteira', 'rmontagem')
+                } else {
+                    check_rmontagem()
+                }
+            } else {
+                troca('esteira', 'rmontagem')
+            }
         }
     }
 }
@@ -335,7 +387,9 @@ function check_rqualidade() {
         if (modificar.rqualidade) {
             if (pt[peca.rqualidade].destino != 'qualidade') {
                 if (modificar.esteira) {
-                    troca('esteira', 'rqualidade')
+                    if (peca.esteira === -1) {
+                        troca('rqualidade', 'esteira')
+                    }
                 } else {
                     if (peca.bqualidade === -1) {
                         troca('rqualidade', 'bqualidade')
@@ -371,11 +425,24 @@ function check_bqualidade() {
     }
 }
 
+var n;
+
 function check_qualidade() {
     if (peca.qualidade != -1) {
         if (modificar.qualidade) {
             if (pt[peca.qualidade].complete) {
-                pt[peca.qualidade].destino = 'end'
+                pt[peca.qualidade].qualidade = Math.round(Math.random() * n++ * 100) / 100
+                if (pt[peca.qualidade].qualidade >= 5 && pt[peca.qualidade].value == '1') {
+                    pt[peca.qualidade].destino = 'descarte'
+                    manutencaotm = true
+                    manutimetm = 0
+                } else if (pt[peca.qualidade].qualidade >= 3 && pt[peca.qualidade].value == '2') {
+                    pt[peca.qualidade].destino = 'descarte'
+                    manutencaomontagem = true
+                    manutimemontagem = 0
+                } else {
+                    pt[peca.qualidade].destino = 'end'
+                }
             } else {
                 if (pt[peca.qualidade].value === '1') {
                     pt[peca.qualidade].destino = 'turnmill'
@@ -393,17 +460,8 @@ function check_qualidade() {
 function check_btm() {
     if (peca.btm != -1) {
         if (modificar.btm) {
-            if (peca.rtm === -1) {
+            if (peca.rtm === -1 && !manutencaotm) {
                 troca('rtm', 'btm')
-            } else {
-                if (modificar.rtm) {
-                    if (peca.tm === -1 && pt[peca.rtm].destino === 'turnmill') {
-                        check_rtm()
-                        troca('rtm', 'btm')
-                    } else if (peca.rtm > peca.btm) {
-                        troca('rtm', 'btm')
-                    }
-                }
             }
         }
     }
@@ -414,7 +472,9 @@ function check_rtm() {
         if (modificar.rtm) {
             if (pt[peca.rtm].destino != 'turnmill') {
                 if (modificar.esteira) {
-                    troca('esteira', 'rtm')
+                    if (peca.esteira === -1) {
+                        troca('esteira', 'rtm')
+                    }
                 } else {
                     if (peca.btm === -1) {
                         troca('rtm', 'btm')
@@ -423,7 +483,13 @@ function check_rtm() {
                     }
                 }
             } else if (peca.tm === -1) {
-                troca('rtm', 'tm')
+                if (!manutencaotm) {
+                    troca('rtm', 'tm')
+                } else {
+                    if (peca.btm === -1) {
+                        troca('rtm', 'btm')
+                    }
+                }
             } else {
                 check_tm()
             }
@@ -440,24 +506,22 @@ function check_tm() {
                 troca('tm', 'rtm')
             }
         }
+    } else {
+        if (manutencaotm) {
+            manutimetm++;
+            if (manutimetm === 10) {
+                n = 1
+                manutencaotm = false
+            }
+        }
     }
 }
 
 function check_bmontagem() {
     if (peca.bmontagem != -1) {
         if (modificar.bmontagem) {
-            if (peca.rmontagem === -1) {
+            if (peca.rmontagem === -1 && !manutencaomontagem) {
                 troca('rmontagem', 'bmontagem')
-            } else {
-                if (modificar.rmontagem) {
-                    if (peca.montagem === -1 && pt[peca.rmontagem].destino === 'montagem') {
-                        check_rmontagem()
-                        troca('bmontagem', 'rmontagem')
-                    }
-                    if (peca.rmontagem > peca.bmontagem) {
-                        troca('rmontagem', 'bmontagem')
-                    }
-                }
             }
         }
     }
@@ -468,7 +532,9 @@ function check_rmontagem() {
         if (modificar.rmontagem) {
             if (pt[peca.rmontagem].destino != 'montagem') {
                 if (modificar.esteira) {
-                    troca('esteira', 'rmontagem')
+                    if (peca.esteira === -1) {
+                        troca('esteira', 'rmontagem')
+                    }
                 } else {
                     if (peca.bmontagem === -1) {
                         troca('rmontagem', 'bmontagem')
@@ -477,7 +543,13 @@ function check_rmontagem() {
                     }
                 }
             } else if (peca.montagem === -1) {
-                troca('rmontagem', 'montagem')
+                if (!manutencaomontagem) {
+                    troca('rmontagem', 'montagem')
+                } else {
+                    if (peca.bmontagem === -1) {
+                        troca('rmontagem', 'bmontagem')
+                    }
+                }
             } else {
                 check_montagem()
             }
@@ -492,6 +564,14 @@ function check_montagem() {
             pt[peca.montagem].complete = true
             if (modificar.montagem) {
                 troca('montagem', 'rmontagem')
+            }
+        }
+    } else {
+        if (manutencaomontagem) {
+            manutimemontagem++;
+            if (manutimemontagem === 10) {
+                n = 1
+                manutencaomontagem = false
             }
         }
     }
@@ -540,6 +620,9 @@ function test_montagem() {
     try {
         return '"Montagem" [color = "' + pt[peca.montagem].color + '"]'
     } catch (error) {
+        if (manutencaomontagem) {
+            return '"Montagem" [fontcolor = "red", style = "dotted", color = "red"]';
+        }
         return '"Montagem"';
     }
 }
@@ -556,6 +639,9 @@ function test_mt() {
     try {
         return '"Mill_turn" [color = "' + pt[peca.tm].color + '"]'
     } catch (error) {
+        if (manutencaotm) {
+            return '"Mill_turn" [fontcolor = "red", style = "dotted", color = "red"]';
+        }
         return '"Mill_turn"';
     }
 }
@@ -663,10 +749,6 @@ function extra() {
         '"Armazem" -> "END" [label = "fim"]',
         '}'
     ]
-}
-
-function padrao() {
-    return ['digraph  {', 'node [style="filled"]']
 }
 
 function troca(a, b) {

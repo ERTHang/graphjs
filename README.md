@@ -21,6 +21,6 @@
 - [x] colocar demanda no automato certo
 - [ ] arrumar automato
 - [ ] colocar botões para mostrar outros automatos (robos, esteira buffer, etc...)
-- [ ] manutencao e verificacao de qualidade
+- [x] manutencao e verificacao de qualidade
 - [ ] campo para algo que está faltando e não quero colocar aqui
 - [ ] <font color='green'><em>TRABALHO ENTREGUE</em></font>

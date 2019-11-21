@@ -19,8 +19,8 @@
 - [x] paralelismo
 - [x] arrumar estilização (talvez eu não vá mais mexer nela, então vou considerar marcado)
 - [x] colocar demanda no automato certo
-- [ ] arrumar automato
-- [ ] colocar botões para mostrar outros automatos (robos, esteira buffer, etc...)
+- [x] arrumar automato
+- [x] colocar botões para mostrar outros automatos (robos, esteira buffer, etc...)
 - [x] manutencao e verificacao de qualidade
-- [ ] campo para algo que está faltando e não quero colocar aqui
-- [ ] <font color='green'><em>TRABALHO ENTREGUE</em></font>
+- [x] campo para algo que está faltando e não quero colocar aqui
+- [x] <font color='green'><em>TRABALHO ENTREGUE</em></font>

@@ -3,23 +3,44 @@
 
 <head>
     <link rel="stylesheet" href="styles.css">
+    <title>GraphJS</title>
 </head>
 
 <body>
-    <script src="https://d3js.org/d3.v5.js"></script>
-    <script src="https://unpkg.com/viz.js@1.8.1/viz.js" type="application/javascript"></script>
-    <script src="https://unpkg.com/d3-graphviz@2.6.1/build/d3-graphviz.js"></script>
-    <input type="text" data-placeholder="Insira a demanda, e.g:121212">
-    <div id="buttons">
-        <button class="button button-1" id="btn1">start/restart</button>
-        <button class="button button-2" id="btn2">stop</button>
-        <button class="button button-3" id="btn3">continue</button>
-    </div>
-    <div id=divs>
-        <div id="graphs">
-            <div id = "graph"></div>
+    <div id="di">
+        <script src="https://d3js.org/d3.v5.js"></script>
+        <script src="https://unpkg.com/viz.js@1.8.1/viz.js" type="application/javascript"></script>
+        <script src="https://unpkg.com/d3-graphviz@2.6.1/build/d3-graphviz.js"></script>
+        <input type="text" data-placeholder="Insira a demanda, e.g:121212">
+        <div id="buttons">
+            <button class="button button-1" id="btn1">start/restart</button>
+            <button class="button button-2" id="btn2">stop</button>
+            <button class="button button-3" id="btn3">continue</button>
         </div>
-        <div id="rainbows"></div>
-        <div id="legenda"></div>
+        <div id=divs>
+            <div id="graphs">
+                <div id="graph"></div>
+            </div>
+            <div id="rainbows"></div>
+            <div id="legenda"></div>
+        </div>
+        <script src="graphviz.js"></script>
     </div>
-    <script src="graphviz.js"></script>
+    <div id="id1">
+        <h1>Feito por Endrew, source code no <a href="https://github.com/ERTHang/graphjs">Github</a></h1>
+        <h1>Automato e documentação por Ana Vedoy e Thiago Pimenta</h1>
+    </div>
+    <div id="automatos">
+        <a href="automatos/sensores_deteccao.html" target="_blank" class="myButton">Sensores de detecção</a>
+        <a href="automatos/robo_parafusa_e_cola.html" target="_blank" class="myButton">Robo de Montagem</a>
+        <a href="automatos/robo_turn_mill.html" target="_blank" class="myButton">Robo Turn e Mill</a>
+        <a href="automatos/robo_armazem.html" target="_blank" class="myButton">Robo do Armazem</a>
+        <a href="automatos/robo_controle.html" target="_blank" class="myButton">Robo de Controle</a>
+        <a href="automatos/maquina_paquimetro.html" target="_blank" class="myButton">Maquina de Paquimetro</a>
+        <a href="automatos/maquina_turn_mill.html" target="_blank" class="myButton">Maquina do Mill e Turn</a>
+        <a href="automatos/maquina_parafusar.html" target="_blank" class="myButton">Maquina de Parafusar</a>
+        <a href="automatos/maquina_colar.html" target="_blank" class="myButton">Maquina de Colar</a>
+        <a href="automatos/maquina_imagem.html" target="_blank" class="myButton">Maquina de Imagem</a>
+        <a href="automatos/esteira.html" target="_blank" class="myButton">Esteira</a>
+        <a href="automatos/buffer.html" target="_blank" class="myButton">Buffer</a>
+    </div>

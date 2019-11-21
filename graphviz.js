@@ -12,7 +12,7 @@ for (var i = 0; i < inputs.length; i++) {
     });
 }
 
-
+alert("Se você achar que está muito rápido, basta apertar STOP e avançar com a seta para direita no seu ritmo")
 
 //elements
 var btn = document.querySelector("#btn1");
@@ -21,6 +21,8 @@ var btn2 = document.querySelector("#btn2");
 var btn3 = document.querySelector("#btn3");
 var legenda = document.querySelector("div#legenda")
 var divs = document.querySelector("#divs");
+var di = document.querySelector("#di")
+var id1 = document.querySelector("div#id1")
 
 //headers
 var dotIndex;
@@ -102,6 +104,8 @@ function reset() {
     manutencaomontagem = false
     manutimetm = 0
     manutimemontagem = 0
+    var id1 = document.querySelector("div#id1")
+    id1.setAttribute("style", "position: absolute;")
 }
 
 
@@ -129,6 +133,12 @@ document.body.addEventListener("keyup", (e) => {
                 erros.textContent = 'Porcentagem de erro'
                 erros.setAttribute('style', 'font-size: 2em; color: red; margin-left: auto; margin-right:auto')
                 legenda.before(erros)
+
+                var di = document.querySelector("#di")
+                if (di.clienteHeight >= 595) {
+                    var id1 = document.querySelector("div#id1")
+                    id1.setAttribute("style", "position: relative;")
+                }
             }
         }
     }
@@ -146,6 +156,8 @@ document.body.addEventListener("keyup", (e) => {
     }
 
 });
+
+
 
 btn3.onclick = function() {
     interative = false;
@@ -248,11 +260,17 @@ function render() {
     element
         .renderDot(dot)
         .on("end", function() {
+
             if (j < pt.length) {
-                if (dots[dotIndex][2].includes('color')) {
+                if (dots[dotIndex][3].includes('color')) {
                     criar_legenda(j)
                     j++
                 }
+            }
+            var di = document.querySelector("#di")
+            if (di.clientHeight >= 595) {
+                var id1 = document.querySelector("div#id1")
+                id1.setAttribute("style", "position: relative;")
             }
 
             if (!interative) {
@@ -260,18 +278,26 @@ function render() {
 
                 if (dotIndex < dots.length) {
                     render();
-                } else if (!showQualidade) {
-                    var relatorio = legenda.querySelectorAll("h1")
-                    var i = 0
-                    relatorio.forEach((param) => {
-                        param.innerHTML = param.innerHTML + " [" + pt[i].qualidade + "%]"
-                        i++
-                    })
-                    var erros = document.createElement("h1")
-                    erros.textContent = 'Porcentagem de erro'
-                    erros.setAttribute('style', 'font-size: 2em; color: red; margin-left: auto; margin-right:auto')
-                    legenda.before(erros)
-                    showQualidade = true
+                } else {
+                    interative = true;
+                    if (!showQualidade) {
+                        var relatorio = legenda.querySelectorAll("h1")
+                        var i = 0
+                        relatorio.forEach((param) => {
+                            param.innerHTML = param.innerHTML + " [" + pt[i].qualidade + "%]"
+                            i++
+                        })
+                        var erros = document.createElement("h1")
+                        erros.textContent = 'Porcentagem de erro'
+                        erros.setAttribute('style', 'font-size: 2em; color: red; margin-left: auto; margin-right:auto')
+                        legenda.before(erros)
+                        showQualidade = true
+                    }
+                    var di = document.querySelector("#di")
+                    if (di.clienteHeight >= 595) {
+                        var id1 = document.querySelector("div#id1")
+                        id1.setAttribute("style", "position: relative;")
+                    }
                 }
 
             }
@@ -529,7 +555,6 @@ function check_tm() {
             }
         }
     } else {
-        console.log(manutimetm)
         if (manutencaotm) {
             manutimetm++;
             if (manutimetm === 10) {
@@ -607,6 +632,7 @@ function update() {
         [
             'digraph  {',
             'node [style="filled"]',
+            '"n0" [label= "", shape=none,height=.0,width=.0]',
             test_armazem(),
             test_esteira(),
             test_qualidade(),
@@ -635,7 +661,6 @@ function update() {
     modificar.rtm = true
     modificar.end = true
 
-    console.log(pt[0].etapa)
 
 }
 
@@ -736,37 +761,38 @@ function test_rqualidade() {
 
 function test_end() {
     try {
-        return '"END" [color = "' + pt[peca.end].color + '\"]'
+        return '"END" [color = "' + pt[peca.end].color + '\", peripheries = 2]'
     } catch (error) {
-        return '"END"'
+        return '"END" [peripheries = 2]'
     }
 }
 
 function extra() {
     return [
+        '"n0" -> "Armazem"',
         '"Armazem" -> "Esteira" [label = "a.1, b.1"]',
         '"Esteira" -> "Esteira" [label = "el?"]',
         //qualidade
-        '"Esteira" -> "rQualidade" [label = "a.7, b.7"]',
+        '"Esteira" -> "rQualidade" [label = "a.2, b.2"]',
         '"rQualidade" -> "bQualidade" [label = "a.3, b.3"]',
         '"bQualidade" -> "rQualidade" [label = "a.4, b.4"]',
         '"rQualidade" -> "Qualidade" [label = "a.5, b.5"]',
         '"Qualidade" -> "rQualidade" [label = "a.6, b.6"]',
-        '"rQualidade" -> "Esteira" [label = "a.2, b.2"]',
+        '"rQualidade" -> "Esteira" [label = "a.7, b.7"]',
         //montagem
-        '"Esteira" -> "rMontagem" [label = "a.8"]',
-        '"rMontagem" -> "bMontagem" [label = "a.9"]',
-        '"bMontagem" -> "rMontagem" [label = "a.10"]',
-        '"rMontagem" -> "Montagem" [label = "a.11"]',
-        '"Montagem" -> "rMontagem" [label = "a.12"]',
-        '"rMontagem" -> "Esteira" [label = "a.13"]',
+        '"Esteira" -> "rMontagem" [label = "b.8"]',
+        '"rMontagem" -> "bMontagem" [label = "b.9"]',
+        '"bMontagem" -> "rMontagem" [label = "b.10"]',
+        '"rMontagem" -> "Montagem" [label = "b.11"]',
+        '"Montagem" -> "rMontagem" [label = "b.12"]',
+        '"rMontagem" -> "Esteira" [label = "b.13"]',
         //millturn
-        '"Esteira" -> "rMillTurn" [label = "b.8"]',
-        '"rMillTurn" -> "bMillTurn" [label = "b.9"]',
-        '"bMillTurn" -> "rMillTurn" [label = "b.10"]',
-        '"rMillTurn" -> "Mill_turn" [label = "b.11"]',
-        '"Mill_turn" -> "rMillTurn" [label = "b.12"]',
-        '"rMillTurn" -> "Esteira" [label = "b.13"]',
+        '"Esteira" -> "rMillTurn" [label = "a.8"]',
+        '"rMillTurn" -> "bMillTurn" [label = "a.9"]',
+        '"bMillTurn" -> "rMillTurn" [label = "a.10"]',
+        '"rMillTurn" -> "Mill_turn" [label = "a.11"]',
+        '"Mill_turn" -> "rMillTurn" [label = "a.12"]',
+        '"rMillTurn" -> "Esteira" [label = "a.13"]',
         //fim
         '"Esteira" -> "Armazem" [label = "a.def, b.def, a.ok, b.ok"]',
         '"Armazem" -> "END" [label = "fim"]',

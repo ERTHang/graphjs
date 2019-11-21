@@ -1,0 +1,7 @@
+Existem dois métodos para abrir este trabalho, que são:
+
+1º - se você está em posse do arquivo zip, extraia para algum local do seu computador e abra o arquivo 
+Index.html no navegador de sua preferência (navegadores muito antigos podem ter alguns conflitos com o css).
+
+2º - com o navegador aberto acesse o site https://erthang.github.io/graphjs/ (github) no qual o projeto está
+hospedado (navegadores muito antigos podem ter alguns conflitos com o css).
